@@ -40,25 +40,29 @@ app.post("/api/get-video-info", async (req, res) => {
 
   try {
     const { videoDetails, formats } = await ytdl.getInfo(url);
-    const { title, thumbnails } = videoDetails;
+    const { title, thumbnails,lengthSeconds } = videoDetails;
     const videoResu = getResu(formats);
 
     return res.status(200).json({
       videoInfo: {
         title,
+        lengthSeconds,
         thumbnailUrl: thumbnails[thumbnails.length - 1].url,
         videoResu,
         lastResu: videoResu[0],
       },
     });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(400).json({ error: 'Invalid YouTube URL or other error' });
   }
 });
 
 app.get("/video-download", async (req, res) => {
   const { id, resu } = req.query;
-  console.log(id, resu);
+  if(!id){
+    throw new Error("Invalid Url")
+  }
   try {
     const {
       videoDetails: { title },
@@ -150,7 +154,7 @@ app.get("/video-download", async (req, res) => {
       `attachment;filename=${filename};filename*=uft-8''${filename}`
     );
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ error: 'Invalid YouTube URL or other error' });
   }
 });
 
