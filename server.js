@@ -53,8 +53,7 @@ app.post("/api/get-video-info", async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: 'Invalid YouTube URL or other error' });
+    res.status(400).json({ error: 'Invalid YouTube URL' });
   }
 });
 
@@ -154,7 +153,7 @@ app.get("/video-download", async (req, res) => {
       `attachment;filename=${filename};filename*=uft-8''${filename}`
     );
   } catch (error) {
-    res.status(400).json({ error: 'Invalid YouTube URL or other error' });
+    res.status(400).json({ error: 'Invalid YouTube URL ' });
   }
 });
 
